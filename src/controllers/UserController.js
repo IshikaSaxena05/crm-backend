@@ -19,7 +19,8 @@ var createDOC = async (data) => {
     // here jwt token can create middleware
     const result = await userDOC.save();
     return {
-      status: 200,
+      status: true,
+      statuscode: 200,
       messages: ["Please check Email for OTP"],
       userId: result._id,
     };
@@ -34,11 +35,15 @@ const UserRegisteration = async (req, res) => {
     const result = await createDOC(req.body);
     // middleware for sending otp in email
     // await sendOTPverificationEmail(result.userId);
-    // console.log(result)
-    res.send(result);
+    if(result.statuscode === 200)
+    res.status(200).send(result);
+    else if(result.statuscode === 409)
+    res.status(409).send(result);
+    else
+    res.status(400).send(result);
   } catch (err) {
-    return res.send({
-      status: 500,
+    res.status(500).send({
+      status: false,
       messages: ["Server Internal Error"],
       Error: err,
     });
@@ -55,22 +60,22 @@ const UserLogin = async (req, res) => {
         const authToken = jwt.sign(
           { userId: result._id },
           process.env.SECRET_KEY,
-          { expiresIn: 10 }
+          { expiresIn: 60 }
         );
-        res.send({
-          status: 200,
+        res.status(200).send({
+          status: true,
           authToken,
           messages: ["Login Successfully !"],
         });
       } else {
-        res.status(400).send({ status: 400, messages: ["Invalid Cerdential"] });
+        res.status(400).send({ status: false, messages: ["Invalid Cerdential"] });
       }
     } else {
-      res.send({ status: 400, messages: ["You are not a Registered User"] });
+      res.status(400).send({ status: 400, messages: ["You are not a Registered User"] });
     }
   } catch (error) {
-    res.send({
-      status: 500,
+    res.status(500).send({
+      status: false,
       Errors: error,
       messages: ["An unknown error occurred."],
     });
