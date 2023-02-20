@@ -7,7 +7,7 @@ const connectDB = require("./src/connection/databaseConnection")
 const web = require("./src/routes/index")
 
 const PORT = process.env.PORT || 5000
-const DB_URL = process.env.DB_URL || "mongodb+srv://cluster0.fdr4btl.mongodb.net/crm"
+const DB_URL = process.env.DB_URL
 
 // database connection
 connectDB(DB_URL);
