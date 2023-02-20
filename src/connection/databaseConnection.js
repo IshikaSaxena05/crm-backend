@@ -1,9 +1,17 @@
 const mongoose = require("mongoose")
-mongoose.set('strictQuery', false);
-mongoose.connect("mongodb+srv://cluster0.fdr4btl.mongodb.net/crm",{
-    serverSelectionTimeoutMS: 10000
-}).then(()=>   
- console.log("Success!!"))
-.catch((err)=>
-    console.log(err)
-)
+const DB_option = {
+    dbName: "crm",
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}
+
+mongoose.set("strictQuery", false);
+
+const connectDB = async (DB_Url) => {
+    console.log(DB_Url);
+mongoose.connect(DB_Url, DB_option)
+.then( () => console.log("connection successful...."))
+.catch( (err) => console.log(err) );
+}
+
+module.exports = connectDB;
