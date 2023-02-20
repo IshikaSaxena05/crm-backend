@@ -22,7 +22,8 @@ module.exports = (err, req, res, next) => {
       return (err = handleDuplicateKeyError(err, res));
   } catch (err) {
     return {
-      status: 500,
+      status: false,
+      statuscode:500,
       Error: err,
       messages: ["An unknown error occurred."],
     };

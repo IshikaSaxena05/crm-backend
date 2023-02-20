@@ -16,7 +16,7 @@ var createDOC = async (data) => {
     // Object.assign(data,{password: hashPassword})      // Replace password value in data
 
     const userDOC = new userModel(data);
-    // here jwt token can create middleware
+
     const result = await userDOC.save();
     return {
       status: true,
@@ -39,8 +39,10 @@ const UserRegisteration = async (req, res) => {
     res.status(200).send(result);
     else if(result.statuscode === 409)
     res.status(409).send(result);
-    else
+    else if(result.statuscode === 400)
     res.status(400).send(result);
+    else
+    res.status(500).send(result);
   } catch (err) {
     res.status(500).send({
       status: false,
@@ -71,7 +73,7 @@ const UserLogin = async (req, res) => {
         res.status(400).send({ status: false, messages: ["Invalid Cerdential"] });
       }
     } else {
-      res.status(400).send({ status: 400, messages: ["You are not a Registered User"] });
+      res.status(400).send({ status: false, messages: ["You are not a Registered User"] });
     }
   } catch (error) {
     res.status(500).send({
